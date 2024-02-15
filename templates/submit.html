@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit New Place</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/vote.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="/">WAIT</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/index">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/vote">Vote</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="/submit">Submit</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/view">View</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <section class="container form-container mt-5 pt-4">
+        <h1 class="text-left mb-4">Submit New Place</h1>
+        <form id="submitForm" onsubmit="submitNewPlace(event)" class="needs-validation" novalidate>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="searchCountry">Search Country:</label>
+                    <input type="text" class="form-control" id="searchCountry" list="countryList" required>
+                    <datalist id="countryList"></datalist>
+                    <div class="invalid-feedback">Please select a country from the list.</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="city">City:</label>
+                    <input type="text" class="form-control" id="city" name="city" required>
+                    <div class="invalid-feedback">Please provide a city.</div>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="attractionName">Attraction Name:</label>
+                <input type="text" class="form-control" id="attractionName" name="attractionName" required>
+                <div class="invalid-feedback">Please provide an attraction name.</div>
+            </div>
+    
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" class="form-control" name="category" required>
+                    <option value="" disabled selected hidden>Please select...</option>
+                    <option value="category1">Natural attractions</option>
+                    <option value="category2">Cultural and historical attractions</option>
+                    <option value="category3">Urban attractions</option>
+                    <option value="category4">Theme park</option>
+                    <option value="category5">Outdoor activity attractions</option>
+                    <option value="category6">Food spots</option>
+                    <option value="category7">Vacation spot</option>
+                    <option value="category8">Arts and Performance</option>
+                    <option value="category9">Gym</option>
+                    <option value="category10">Characteristic towns</option>
+                </select>
+                <div class="invalid-feedback">Please select a category.</div>
+            </div>
+    
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="childFriendly">Child Friendly:</label>
+                    <select id="childFriendly" class="form-control" name="childFriendly" required>
+                        <option value="" disabled selected hidden>Please select...</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                    <div class="invalid-feedback">Please select whether it's child friendly.</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="accessible">Accessible:</label>
+                    <select id="accessible" class="form-control" name="accessible" required>
+                        <option value="" disabled selected hidden>Please select...</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                    <div class="invalid-feedback">Please select whether it's accessible.</div>
+                </div>
+            </div>
+    
+            <button type="submit" class="btn-secondary">Submit</button>
+        </form>
+    </section>
+
+    <div id="modalWrapper">
+        <section id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <p>Add Successfully!</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var countryList = document.getElementById('countryList');
+            countryList.innerHTML = ''; 
+
+            var countries = [
+                "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antigua and Barbuda",
+                "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
+                "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bonaire Sint Eustatius and Saba",
+                "Bosnia and Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso",
+                "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad",
+                "Chile", "China", "Colombia", "Comoros", "Congo", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba",
+                "Curacao", "Cyprus", "Czechia", "Democratic Republic of Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic",
+                "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
+                "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "Gabon", "Gambia",
+                "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey",
+                "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran",
+                "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati",
+                "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania",
+                "Luxembourg", "Macao", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique",
+                "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia (country)", "Moldova", "Monaco", "Mongolia", "Montenegro",
+                "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Caledonia", "New Zealand",
+                "Nicaragua", "Niger", "Nigeria", "Niue", "North Korea", "North Macedonia", "Northern Mariana Islands", "Norway", "Oman",
+                "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
+                "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Barthelemy", "Saint Helena", "Saint Kitts and Nevis",
+                "Saint Lucia", "Saint Martin (French part)", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", "Samoa",
+                "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore",
+                "Sint Maarten (Dutch part)", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan",
+                "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand",
+                "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu",
+                "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Virgin Islands", "Uruguay",
+                "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"
+            ];
+
+            countries.forEach(function (country) {
+                var option = document.createElement("option");
+                option.value = country;
+                countryList.appendChild(option);
+            });
+        });
+
+        function submitNewPlace(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('submitForm');
+            if (form.checkValidity() === false) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const country = document.getElementById('searchCountry').value;
+            const city = document.getElementById('city').value;
+            const attractionName = document.getElementById('attractionName').value;
+            const category = document.getElementById('category').value;
+            const childFriendly = document.getElementById('childFriendly').value === 'true';
+            const accessible = document.getElementById('accessible').value === 'true';
+
+            // Check if the entered country is in the list of countries
+            const countryList = document.getElementById('countryList');
+            const countryEntered = countryList.querySelector(`option[value="${country}"]`);
+            if (!countryEntered) {
+                alert('Please select a country from the list.');
+                return;
+            }
+
+            console.log('Country:', country)
+            console.log('City:', city)
+            console.log('Attraction Name:', attractionName)
+            console.log('Category:', category)
+            console.log('Child Friendly:', childFriendly)
+            console.log('Accessible:', accessible)
+
+            var data = {
+                country_name: country,
+                city: city,
+                attraction_name: attractionName,
+                category: category,
+                child_friendly: childFriendly,
+                accessible: accessible
+            };
+
+            fetch('/add_attraction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result);
+                    openModal();
+                    form.reset();
+                    form.classList.remove('was-validated');
+                })
+                .catch(error => {
+                    console.error('Request failed:', error);
+                });
+        }
+
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
