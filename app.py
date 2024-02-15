@@ -2,8 +2,9 @@ import csv
 import threading
 from time import sleep
 import bisect
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, redirect, url_for
 from datetime import datetime
+
 
 class Vote:
     def __init__(self, user_id, feedback):
@@ -270,16 +271,17 @@ def get_user_votes():
 
     return jsonify(votes_data), 200
 
+
 @app.route('/')
 def index():
     user_id = request.cookies.get('userID')
     if not user_id:
-        response = make_response(jsonify({"message": "Welcome to the site!"}))
         user_id = str(tourism_graph.generate_new_user_id())
+        response = make_response(redirect(url_for('home')))
         response.set_cookie('userID', user_id)
         return response
     else:
-        return jsonify({"message": "Welcome back!", "userID": user_id})
+        return redirect(url_for('home'))
 
 
 @app.route('/top_attractions', methods=['GET'])
