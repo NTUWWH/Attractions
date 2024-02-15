@@ -1,0 +1,57 @@
+/* Navbar customization */
+.navbar-light .navbar-nav .nav-link {
+    color: #00000080; /* 浅色字体颜色 */
+    font-weight: bold; /* Specific to .navbar-brand */
+    font-size: 20px;
+}
+  
+.navbar-light .navbar-brand {
+    font-size: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000000; /* 浅色字体颜色 */
+    font-weight: bold;
+}
+  
+/* 用于突出显示当前激活链接的样式 */
+.navbar-light .navbar-nav .nav-link.active,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #000000; /* 突出颜色 */
+}
+  
+.navbar-toggler {
+    background: #fff;
+    padding: 1px 5px;
+    font-size: 18px;
+    line-height: 0.3;
+}
+    
+.navbar-nav {
+    text-align: center;
+}
+    
+.nav-link {
+    padding: .2rem 1rem;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media (max-width: 576px) {
+    .filter-group {
+        flex-basis: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .actions button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
